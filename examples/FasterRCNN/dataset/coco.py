@@ -47,17 +47,21 @@ class COCODetection(DatasetSplit):
             use `COCODetection(DIR, 'XX')` and `COCODetection(DIR, 'YY')`
         """
         basedir = os.path.expanduser(basedir)
-        self._imgdir = os.path.realpath(os.path.join(
-            basedir, self._INSTANCE_TO_BASEDIR.get(split, split)))
+        self._imgdir = self.get_images_dir(split=split)
         assert os.path.isdir(self._imgdir), "{} is not a directory!".format(self._imgdir)
-        annotation_file = os.path.join(
-            basedir, 'annotations/instances_{}.json'.format(split))
+        annotation_file = self.get_annotations_file(split=split)
         assert os.path.isfile(annotation_file), annotation_file
 
         from pycocotools.coco import COCO
         self.coco = COCO(annotation_file)
         self.annotation_file = annotation_file
         logger.info("Instances loaded from {}.".format(annotation_file))
+
+    def get_images_dir(self, split):
+        return os.path.realpath(os.path.join(basedir, self._INSTANCE_TO_BASEDIR.get(split, split)))
+
+    def get_annotations_file(self, split):
+        return os.path.join(basedir, 'annotations/instances_{}.json'.format(split))
 
     # https://github.com/cocodataset/cocoapi/blob/master/PythonAPI/pycocoEvalDemo.ipynb
     def print_coco_metrics(self, results):
