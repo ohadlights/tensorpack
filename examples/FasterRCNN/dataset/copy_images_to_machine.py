@@ -8,8 +8,11 @@ from tqdm import tqdm
 
 
 def copy_file(file, source_dir, target_dir):
-    copy(os.path.join(source_dir, file),
-         os.path.join(target_dir, file))
+    s = os.path.join(source_dir, file)
+    t = os.path.join(target_dir, file)
+    if os.path.exists(t):
+        return
+    copy(s, t)
 
 
 def main(args):
