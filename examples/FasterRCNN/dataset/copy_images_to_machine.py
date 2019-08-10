@@ -24,5 +24,5 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--source_dir', required=True)
     p.add_argument('--target_dir', required=True)
-    p.add_argument('--num_process', type=int, default=10)
+    p.add_argument('--num_processes', type=int, default=10)
     main(p.parse_args())
