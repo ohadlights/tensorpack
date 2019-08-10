@@ -2,7 +2,6 @@ import os
 
 from tensorpack.utils import logger
 
-from config import config as cfg
 from dataset import DatasetRegistry
 from dataset.coco import COCODetection
 
