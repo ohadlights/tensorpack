@@ -12,7 +12,7 @@ __all__ = ['register_open_images']
 class OpenImagesDetection(COCODetection):
     def __init__(self, basedir, split):
         self._basedir = basedir
-        super().__init__(basedir=basedir, split=split)
+        super().__init__(basedir=basedir, split=split, test_seg=False)
 
     def get_images_dir(self, split):
         return os.path.realpath(os.path.join(self._basedir, 'images', split, 'original'))

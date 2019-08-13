@@ -27,7 +27,7 @@ class COCODetection(DatasetSplit):
     """
     COCO_id_to_category_id = {13: 12, 14: 13, 15: 14, 16: 15, 17: 16, 18: 17, 19: 18, 20: 19, 21: 20, 22: 21, 23: 22, 24: 23, 25: 24, 27: 25, 28: 26, 31: 27, 32: 28, 33: 29, 34: 30, 35: 31, 36: 32, 37: 33, 38: 34, 39: 35, 40: 36, 41: 37, 42: 38, 43: 39, 44: 40, 46: 41, 47: 42, 48: 43, 49: 44, 50: 45, 51: 46, 52: 47, 53: 48, 54: 49, 55: 50, 56: 51, 57: 52, 58: 53, 59: 54, 60: 55, 61: 56, 62: 57, 63: 58, 64: 59, 65: 60, 67: 61, 70: 62, 72: 63, 73: 64, 74: 65, 75: 66, 76: 67, 77: 68, 78: 69, 79: 70, 80: 71, 81: 72, 82: 73, 84: 74, 85: 75, 86: 76, 87: 77, 88: 78, 89: 79, 90: 80}  # noqa
 
-    def __init__(self, basedir, split):
+    def __init__(self, basedir, split, test_seg=True):
         """
         Args:
             basedir (str): root of the dataset which contains the subdirectories for each split and annotations
@@ -46,6 +46,7 @@ class COCODetection(DatasetSplit):
 
             use `COCODetection(DIR, 'XX')` and `COCODetection(DIR, 'YY')`
         """
+        self._test_seg = test_seg
         basedir = os.path.expanduser(basedir)
         self._imgdir = self.get_images_dir(split=split)
         assert os.path.isdir(self._imgdir), "{} is not a directory!".format(self._imgdir)
@@ -82,7 +83,7 @@ class COCODetection(DatasetSplit):
         for k in range(6):
             ret['mAP(bbox)/' + fields[k]] = cocoEval.stats[k]
 
-        if len(results) > 0 and 'segmentation' in results[0]:
+        if self._test_seg and len(results) > 0 and 'segmentation' in results[0]:
             cocoEval = COCOeval(self.coco, cocoDt, 'segm')
             cocoEval.evaluate()
             cocoEval.accumulate()
